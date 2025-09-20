@@ -1,7 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Shield, BarChart3 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <header className="w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border sticky top-0 z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -17,22 +27,39 @@ const Header = () => {
           </div>
           
           <nav className="hidden md:flex items-center space-x-6">
-            <a href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            <button 
+              onClick={() => scrollToSection('features')} 
+              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
               Features
-            </a>
-            <a href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            </button>
+            <button 
+              onClick={() => window.open('https://activ3websolutions.com/about', '_blank')} 
+              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
               How It Works
-            </a>
-            <a href="#contact" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            </button>
+            <button 
+              onClick={() => window.open('https://activ3websolutions.com/contact', '_blank')} 
+              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
               Contact
-            </a>
+            </button>
           </nav>
           
           <div className="flex items-center space-x-3">
-            <Button variant="ghost" size="sm">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => navigate('/dashboard')}
+            >
               Sign In
             </Button>
-            <Button variant="brand" size="sm">
+            <Button 
+              variant="brand" 
+              size="sm"
+              onClick={() => navigate('/dashboard')}
+            >
               <BarChart3 className="mr-2 h-4 w-4" />
               Get Free Audit
             </Button>
