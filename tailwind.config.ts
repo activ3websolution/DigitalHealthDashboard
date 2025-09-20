@@ -19,6 +19,22 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        
+        // Brand colors for digital health dashboard
+        brand: {
+          primary: "hsl(var(--brand-primary))",
+          secondary: "hsl(var(--brand-secondary))",
+          accent: "hsl(var(--brand-accent))",
+        },
+        
+        // Health score colors
+        health: {
+          excellent: "hsl(var(--health-excellent))",
+          good: "hsl(var(--health-good))",
+          fair: "hsl(var(--health-fair))",
+          poor: "hsl(var(--health-poor))",
+        },
+        
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -57,6 +73,26 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+      },
+      
+      // Custom gradients
+      backgroundImage: {
+        'gradient-brand': 'var(--gradient-brand)',
+        'gradient-health': 'var(--gradient-health)', 
+        'gradient-card': 'var(--gradient-card)',
+      },
+      
+      // Custom shadows
+      boxShadow: {
+        'soft': 'var(--shadow-soft)',
+        'brand': 'var(--shadow-brand)',
+        'elevated': 'var(--shadow-elevated)',
+      },
+      
+      // Custom transitions
+      transitionTimingFunction: {
+        'smooth': 'var(--transition-smooth)',
+        'bounce': 'var(--transition-bounce)',
       },
       borderRadius: {
         lg: "var(--radius)",
