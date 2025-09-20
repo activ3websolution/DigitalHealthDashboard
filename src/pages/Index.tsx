@@ -9,7 +9,8 @@ import {
   CheckCircle, 
   Star,
   ArrowRight,
-  ExternalLink
+  ExternalLink,
+  Globe
 } from "lucide-react";
 import heroImage from "@/assets/dashboard-hero.jpg";
 import { useNavigate } from "react-router-dom";
@@ -86,7 +87,115 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* How It Works Section */}
+      <section id="how-it-works" className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center space-y-4 mb-16">
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
+              How It Works
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Get comprehensive insights about your website's health in just three simple steps.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            {[
+              {
+                step: "01",
+                title: "Enter Your Website",
+                description: "Simply paste your website URL into our analysis tool. No registration or setup required.",
+                icon: <Globe className="h-8 w-8 text-brand-primary" />
+              },
+              {
+                step: "02", 
+                title: "Instant Analysis",
+                description: "Our tool automatically scans your site for performance, SEO, accessibility, and security issues.",
+                icon: <BarChart3 className="h-8 w-8 text-brand-primary" />
+              },
+              {
+                step: "03",
+                title: "Get Solutions",
+                description: "Receive a detailed report with actionable recommendations and connect with our expert team for fixes.",
+                icon: <CheckCircle className="h-8 w-8 text-brand-primary" />
+              }
+            ].map((step, index) => (
+              <Card key={index} className="relative border-border shadow-soft hover:shadow-brand transition-all duration-300 group text-center">
+                <CardContent className="p-8 space-y-4">
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                    <div className="w-8 h-8 bg-gradient-brand text-white rounded-full flex items-center justify-center text-sm font-bold">
+                      {step.step}
+                    </div>
+                  </div>
+                  <div className="pt-4">
+                    <div className="flex justify-center group-hover:scale-110 transition-transform duration-200 mb-4">
+                      {step.icon}
+                    </div>
+                    <h3 className="text-xl font-semibold text-foreground mb-3">{step.title}</h3>
+                    <p className="text-muted-foreground">{step.description}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="py-20 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center space-y-4 mb-12">
+              <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
+                Ready to Get Started?
+              </h2>
+              <p className="text-lg text-muted-foreground">
+                Start with a free website health check, or contact our team directly for professional web solutions.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Free Health Check Card */}
+              <Card className="bg-gradient-brand border-0 shadow-brand text-white text-center">
+                <CardContent className="p-8 space-y-4">
+                  <BarChart3 className="h-12 w-12 mx-auto mb-4" />
+                  <h3 className="text-2xl font-bold mb-4">Free Health Check</h3>
+                  <p className="opacity-90 mb-6">
+                    Get an instant analysis of your website's performance, SEO, and user experience issues.
+                  </p>
+                  <Button 
+                    variant="secondary" 
+                    size="lg"
+                    onClick={() => navigate('/dashboard')}
+                    className="w-full"
+                  >
+                    Start Free Analysis
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Professional Help Card */}
+              <Card className="border-border shadow-soft text-center">
+                <CardContent className="p-8 space-y-4">
+                  <Users className="h-12 w-12 text-brand-primary mx-auto mb-4" />
+                  <h3 className="text-2xl font-bold text-foreground mb-4">Professional Help</h3>
+                  <p className="text-muted-foreground mb-6">
+                    Need expert assistance? Our team at Activ3 Web Solutions specializes in fixing website issues and boosting performance.
+                  </p>
+                  <Button 
+                    variant="cta" 
+                    size="lg"
+                    onClick={() => window.open('https://activ3websolutions.com/contact', '_blank')}
+                    className="w-full"
+                  >
+                    Contact Our Experts <ExternalLink className="ml-2 h-4 w-4" />
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
       <section id="features" className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="text-center space-y-4 mb-16">
@@ -171,9 +280,9 @@ const Index = () => {
                   variant="outline" 
                   size="lg"
                   className="border-white/20 text-white hover:bg-white/10 text-lg px-8 py-6 h-auto"
-                  onClick={() => window.open('https://activ3websolutions.com/contact', '_blank')}
+                  onClick={() => window.open('https://activ3websolutions.com', '_blank')}
                 >
-                  Get Professional Help <ExternalLink className="ml-2 h-4 w-4" />
+                  Learn About Activ3 <ExternalLink className="ml-2 h-4 w-4" />
                 </Button>
               </div>
             </CardContent>
@@ -185,7 +294,7 @@ const Index = () => {
       <footer className="bg-muted/30 py-12">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 cursor-pointer" onClick={() => navigate('/')}>
               <div className="flex items-center justify-center w-8 h-8 bg-gradient-brand rounded-lg">
                 <Shield className="h-5 w-5 text-white" />
               </div>

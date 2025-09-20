@@ -6,9 +6,21 @@ const Header = () => {
   const navigate = useNavigate();
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    // If we're not on the homepage, navigate there first
+    if (window.location.pathname !== '/') {
+      navigate('/');
+      // Wait for navigation to complete, then scroll
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 
@@ -16,7 +28,7 @@ const Header = () => {
     <header className="w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border sticky top-0 z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 cursor-pointer" onClick={() => navigate('/')}>
             <div className="flex items-center justify-center w-8 h-8 bg-gradient-brand rounded-lg">
               <Shield className="h-5 w-5 text-white" />
             </div>
@@ -34,13 +46,13 @@ const Header = () => {
               Features
             </button>
             <button 
-              onClick={() => window.open('https://activ3websolutions.com/about', '_blank')} 
+              onClick={() => scrollToSection('how-it-works')} 
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
               How It Works
             </button>
             <button 
-              onClick={() => window.open('https://activ3websolutions.com/contact', '_blank')} 
+              onClick={() => scrollToSection('contact')} 
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
               Contact
@@ -58,7 +70,7 @@ const Header = () => {
             <Button 
               variant="brand" 
               size="sm"
-              onClick={() => navigate('/dashboard')}
+              onClick={() => scrollToSection('contact')}
             >
               <BarChart3 className="mr-2 h-4 w-4" />
               Get Free Audit
