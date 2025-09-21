@@ -148,7 +148,7 @@ const Dashboard = () => {
             </div>
             
             <HealthScore {...mockResults} />
-            <IssuesList />
+            <IssuesList siteUrl={mockResults.siteUrl} />
             
             {/* Final CTA Section */}
             <Card className="bg-gradient-brand border-0 shadow-elevated text-white text-center">

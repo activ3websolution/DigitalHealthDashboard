@@ -21,49 +21,123 @@ interface Issue {
   impact: string;
 }
 
-const IssuesList = () => {
-  const issues: Issue[] = [
-    {
-      id: "1",
-      title: "Slow Page Load Speed",
-      description: "Your website takes 4.2 seconds to load on mobile devices. Users expect pages to load within 2-3 seconds.",
-      severity: "high",
-      category: "performance",
-      impact: "High bounce rate, poor user experience"
-    },
-    {
-      id: "2", 
-      title: "Unoptimized Images",
-      description: "Large image files are slowing down your site. Images should be compressed and in modern formats like WebP.",
-      severity: "medium",
-      category: "performance", 
-      impact: "Slower loading times, increased bandwidth usage"
-    },
-    {
-      id: "3",
-      title: "Missing Alt Text on Images",
-      description: "Several images lack descriptive alt text, making your site less accessible to screen readers.",
-      severity: "medium",
-      category: "accessibility",
-      impact: "Poor accessibility, SEO penalties"
-    },
-    {
-      id: "4",
-      title: "No SSL Certificate",
-      description: "Your website is not using HTTPS, which can hurt user trust and search engine rankings.", 
-      severity: "high",
-      category: "security",
-      impact: "Security warnings, lower search rankings"
-    },
-    {
-      id: "5",
-      title: "Missing Meta Descriptions",
-      description: "Many pages lack meta descriptions, missing opportunities for better search engine visibility.",
-      severity: "low", 
-      category: "seo",
-      impact: "Lower click-through rates from search results"
+interface IssuesListProps {
+  siteUrl: string;
+}
+
+const IssuesList = ({ siteUrl }: IssuesListProps) => {
+  // Generate different issues based on website URL
+  const generateIssuesForSite = (url: string): Issue[] => {
+    const domain = url.replace(/https?:\/\//, '').replace(/\/$/, '');
+    
+    // Create pseudo-randomness based on domain
+    const hash = domain.split('').reduce((a, b) => {
+      a = ((a << 5) - a) + b.charCodeAt(0);
+      return a & a;
+    }, 0);
+    
+    const randomSeed = Math.abs(hash) % 100;
+    
+    // All possible issues
+    const allIssues: Issue[] = [
+      {
+        id: "1",
+        title: "Slow Page Load Speed",
+        description: `Your website takes ${(2.8 + (randomSeed % 30) / 10).toFixed(1)} seconds to load on mobile devices. Users expect pages to load within 2-3 seconds.`,
+        severity: randomSeed % 3 === 0 ? "high" : "medium",
+        category: "performance",
+        impact: "High bounce rate, poor user experience"
+      },
+      {
+        id: "2", 
+        title: "Unoptimized Images",
+        description: `${12 + (randomSeed % 15)} images are not optimized. Images should be compressed and in modern formats like WebP.`,
+        severity: "medium",
+        category: "performance", 
+        impact: "Slower loading times, increased bandwidth usage"
+      },
+      {
+        id: "3",
+        title: "Missing Alt Text on Images",
+        description: `${3 + (randomSeed % 8)} images lack descriptive alt text, making your site less accessible to screen readers.`,
+        severity: randomSeed % 4 === 0 ? "high" : "medium",
+        category: "accessibility",
+        impact: "Poor accessibility, SEO penalties"
+      },
+      {
+        id: "4",
+        title: "SSL Certificate Issues",
+        description: randomSeed % 5 === 0 ? "Your website is not using HTTPS, which can hurt user trust and search engine rankings." : "Your SSL certificate expires soon and needs renewal.",
+        severity: randomSeed % 5 === 0 ? "high" : "medium",
+        category: "security",
+        impact: "Security warnings, lower search rankings"
+      },
+      {
+        id: "5",
+        title: "Missing Meta Descriptions",
+        description: `${8 + (randomSeed % 20)} pages lack meta descriptions, missing opportunities for better search engine visibility.`,
+        severity: "low", 
+        category: "seo",
+        impact: "Lower click-through rates from search results"
+      },
+      {
+        id: "6",
+        title: "Poor Mobile Responsiveness",
+        description: "Your website doesn't display properly on mobile devices, affecting user experience and search rankings.",
+        severity: "high",
+        category: "accessibility",
+        impact: "Poor mobile user experience, lower mobile search rankings"
+      },
+      {
+        id: "7",
+        title: "Outdated JavaScript Libraries",
+        description: `${2 + (randomSeed % 5)} JavaScript libraries are outdated and may have security vulnerabilities.`,
+        severity: "medium",
+        category: "security",
+        impact: "Potential security risks, compatibility issues"
+      },
+      {
+        id: "8",
+        title: "Missing Structured Data",
+        description: "Your website lacks structured data markup, missing opportunities for rich search results.",
+        severity: "low",
+        category: "seo",
+        impact: "Missed rich snippet opportunities, lower CTR"
+      },
+      {
+        id: "9",
+        title: "Large CSS Files",
+        description: `CSS files are ${(randomSeed % 400) + 200}KB, causing render-blocking issues.`,
+        severity: "medium",
+        category: "performance",
+        impact: "Slower page rendering, poor Core Web Vitals"
+      },
+      {
+        id: "10",
+        title: "Missing Error Pages",
+        description: "Custom 404 and error pages are missing, leading to poor user experience.",
+        severity: "low",
+        category: "accessibility",
+        impact: "Poor user experience when errors occur"
+      }
+    ];
+
+    // Select 4-6 issues based on the domain hash
+    const numIssues = 4 + (randomSeed % 3);
+    const selectedIndices = [];
+    
+    for (let i = 0; i < numIssues; i++) {
+      let index = (randomSeed + i * 17) % allIssues.length;
+      while (selectedIndices.includes(index)) {
+        index = (index + 1) % allIssues.length;
+      }
+      selectedIndices.push(index);
     }
-  ];
+    
+    return selectedIndices.map(index => allIssues[index]);
+  };
+
+  const issues = generateIssuesForSite(siteUrl);
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
