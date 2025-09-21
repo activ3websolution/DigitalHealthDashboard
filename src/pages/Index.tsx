@@ -277,9 +277,9 @@ const Index = () => {
                   Start Free Analysis
                 </Button>
                 <Button 
-                  variant="outline" 
+                  variant="secondary" 
                   size="lg"
-                  className="border-white/20 text-white hover:bg-white/10 text-lg px-8 py-6 h-auto"
+                  className="text-lg px-8 py-6 h-auto"
                   onClick={() => window.open('https://activ3websolutions.com', '_blank')}
                 >
                   Learn About Activ3 <ExternalLink className="ml-2 h-4 w-4" />

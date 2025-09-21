@@ -13,14 +13,28 @@ const Dashboard = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showResults, setShowResults] = useState(false);
 
-  // Mock data - in real implementation, this would come from API
-  const mockResults = {
-    overallScore: 72,
-    performanceMobile: 68,
-    performanceDesktop: 85,
-    accessibility: 79,
-    siteUrl: websiteUrl || "example.com"
+  // Generate different mock data based on website URL
+  const generateMockResults = (url: string) => {
+    const domain = url.replace(/https?:\/\//, '').replace(/\/$/, '');
+    
+    // Create pseudo-randomness based on domain
+    const hash = domain.split('').reduce((a, b) => {
+      a = ((a << 5) - a) + b.charCodeAt(0);
+      return a & a;
+    }, 0);
+    
+    const randomSeed = Math.abs(hash) % 100;
+    
+    return {
+      overallScore: 45 + (randomSeed % 45), // 45-89
+      performanceMobile: 35 + (randomSeed % 50), // 35-84  
+      performanceDesktop: 55 + ((randomSeed * 2) % 40), // 55-94
+      accessibility: 50 + ((randomSeed * 3) % 45), // 50-94
+      siteUrl: domain || "example.com"
+    };
   };
+
+  const mockResults = generateMockResults(websiteUrl);
 
   const handleAnalyze = async () => {
     setIsAnalyzing(true);
