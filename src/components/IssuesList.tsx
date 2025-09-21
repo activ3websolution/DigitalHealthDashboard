@@ -23,9 +23,16 @@ interface Issue {
 
 interface IssuesListProps {
   siteUrl: string;
+  realIssues?: Array<{
+    title: string;
+    description: string;
+    severity: "high" | "medium" | "low";
+    category: "performance" | "accessibility" | "seo" | "security";
+    impact: string;
+  }>;
 }
 
-const IssuesList = ({ siteUrl }: IssuesListProps) => {
+const IssuesList = ({ siteUrl, realIssues }: IssuesListProps) => {
   // Generate different issues based on website URL
   const generateIssuesForSite = (url: string): Issue[] => {
     const domain = url.replace(/https?:\/\//, '').replace(/\/$/, '');
@@ -137,7 +144,9 @@ const IssuesList = ({ siteUrl }: IssuesListProps) => {
     return selectedIndices.map(index => allIssues[index]);
   };
 
-  const issues = generateIssuesForSite(siteUrl);
+  const issues = realIssues && realIssues.length > 0 ? 
+    realIssues.map((issue, index) => ({ ...issue, id: String(index + 1) })) : 
+    generateIssuesForSite(siteUrl);
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {

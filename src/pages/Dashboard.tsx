@@ -8,10 +8,44 @@ import IssuesList from "@/components/IssuesList";
 import { Search, Globe, BarChart3, ExternalLink } from "lucide-react";
 import { useState } from "react";
 
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient("https://cieqyuxyefifhhfbexmk.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNpZXF5dXh5ZWZpZmhoZmJleG1rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzIyMTc3NzQsImV4cCI6MjA0Nzc5Mzc3NH0.vp7EFCQRTt14b_fmdLHE5zr8-FsaGRDa22CWDXdm-Zk");
+
 const Dashboard = () => {
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [analysisResults, setAnalysisResults] = useState(null);
+
+  const handleAnalyze = async () => {
+    if (!websiteUrl) return;
+    
+    setIsAnalyzing(true);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('analyze-website', {
+        body: { url: websiteUrl }
+      });
+
+      if (error) {
+        console.error('Analysis error:', error);
+        // Fallback to mock data on error
+        setAnalysisResults(generateMockResults(websiteUrl));
+      } else {
+        setAnalysisResults(data);
+      }
+      
+      setShowResults(true);
+    } catch (error) {
+      console.error('Error calling analysis:', error);
+      // Fallback to mock data on error
+      setAnalysisResults(generateMockResults(websiteUrl));
+      setShowResults(true);
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
 
   // Generate different mock data based on website URL
   const generateMockResults = (url: string) => {
@@ -34,16 +68,7 @@ const Dashboard = () => {
     };
   };
 
-  const mockResults = generateMockResults(websiteUrl);
-
-  const handleAnalyze = async () => {
-    setIsAnalyzing(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsAnalyzing(false);
-      setShowResults(true);
-    }, 2000);
-  };
+  const mockResults = analysisResults || generateMockResults(websiteUrl);
 
   return (
     <div className="min-h-screen bg-background">
@@ -148,7 +173,11 @@ const Dashboard = () => {
             </div>
             
             <HealthScore {...mockResults} />
-            <IssuesList siteUrl={mockResults.siteUrl} />
+            {analysisResults?.issues ? (
+              <IssuesList siteUrl={mockResults.siteUrl} realIssues={analysisResults.issues} />
+            ) : (
+              <IssuesList siteUrl={mockResults.siteUrl} />
+            )}
             
             {/* Final CTA Section */}
             <Card className="bg-gradient-brand border-0 shadow-elevated text-white text-center">
