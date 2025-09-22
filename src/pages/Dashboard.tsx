@@ -5,6 +5,8 @@ import { Label } from "@/components/ui/label";
 import Header from "@/components/Header";
 import HealthScore from "@/components/HealthScore";
 import IssuesList from "@/components/IssuesList";
+import CoreWebVitals from "@/components/CoreWebVitals";
+import ProgressIndicator from "@/components/ProgressIndicator";
 import { Search, Globe, BarChart3, ExternalLink } from "lucide-react";
 import { useState } from "react";
 
@@ -17,13 +19,41 @@ const Dashboard = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [analysisResults, setAnalysisResults] = useState(null);
+  const [analysisSteps, setAnalysisSteps] = useState([
+    { id: "fetch", name: "Fetching Website", status: "pending" as "pending" | "running" | "completed" | "error", description: "Loading your website for analysis" },
+    { id: "performance", name: "Performance Analysis", status: "pending" as "pending" | "running" | "completed" | "error", description: "Testing speed and Core Web Vitals" },
+    { id: "accessibility", name: "Accessibility Check", status: "pending" as "pending" | "running" | "completed" | "error", description: "Scanning for accessibility issues" },
+    { id: "seo", name: "SEO Analysis", status: "pending" as "pending" | "running" | "completed" | "error", description: "Evaluating search engine optimization" },
+    { id: "security", name: "Security Scan", status: "pending" as "pending" | "running" | "completed" | "error", description: "Checking for security vulnerabilities" }
+  ]);
 
   const handleAnalyze = async () => {
     if (!websiteUrl) return;
     
     setIsAnalyzing(true);
+    setShowResults(false);
+    
+    // Reset analysis steps
+    setAnalysisSteps(steps => steps.map(step => ({ ...step, status: "pending" as "pending" | "running" | "completed" | "error" })));
+    
+    // Simulate progressive analysis steps
+    const stepIds = ["fetch", "performance", "accessibility", "seo", "security"];
     
     try {
+      // Update steps progressively
+      for (let i = 0; i < stepIds.length; i++) {
+        setAnalysisSteps(prev => prev.map(step => 
+          step.id === stepIds[i] ? { ...step, status: "running" as "pending" | "running" | "completed" | "error" } : step
+        ));
+        
+        // Add realistic delays for each step
+        await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 400));
+        
+        setAnalysisSteps(prev => prev.map(step => 
+          step.id === stepIds[i] ? { ...step, status: "completed" as "pending" | "running" | "completed" | "error" } : step
+        ));
+      }
+
       const { data, error } = await supabase.functions.invoke('analyze-website', {
         body: { url: websiteUrl }
       });
@@ -39,6 +69,11 @@ const Dashboard = () => {
       setShowResults(true);
     } catch (error) {
       console.error('Error calling analysis:', error);
+      // Mark current step as error
+      setAnalysisSteps(prev => prev.map(step => 
+        step.status === "running" ? { ...step, status: "error" as "pending" | "running" | "completed" | "error" } : step
+      ));
+      
       // Fallback to mock data on error
       setAnalysisResults(generateMockResults(websiteUrl));
       setShowResults(true);
@@ -64,7 +99,10 @@ const Dashboard = () => {
       performanceMobile: 35 + (randomSeed % 50), // 35-84  
       performanceDesktop: 55 + ((randomSeed * 2) % 40), // 55-94
       accessibility: 50 + ((randomSeed * 3) % 45), // 50-94
-      siteUrl: domain || "example.com"
+      seo: 60 + ((randomSeed * 4) % 35), // 60-94
+      bestPractices: 55 + ((randomSeed * 5) % 40), // 55-94
+      siteUrl: domain || "example.com",
+      analyzedAt: new Date().toISOString()
     };
   };
 
@@ -157,6 +195,18 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
+        ) : isAnalyzing ? (
+          <div className="max-w-2xl mx-auto">
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold text-foreground mb-2">
+                Analyzing Your Website
+              </h1>
+              <p className="text-muted-foreground">
+                Please wait while we perform a comprehensive analysis of {websiteUrl}
+              </p>
+            </div>
+            <ProgressIndicator steps={analysisSteps} />
+          </div>
         ) : (
           <div className="space-y-8">
             <div className="text-center">
@@ -173,6 +223,7 @@ const Dashboard = () => {
             </div>
             
             <HealthScore {...mockResults} />
+            <CoreWebVitals />
             {analysisResults?.issues ? (
               <IssuesList siteUrl={mockResults.siteUrl} realIssues={analysisResults.issues} />
             ) : (
