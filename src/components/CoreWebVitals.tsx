@@ -24,7 +24,7 @@ const CoreWebVitals = ({ vitals }: CoreWebVitalsProps) => {
     {
       metric: "Largest Contentful Paint (LCP)",
       value: "2.4s",
-      score: 75,
+      score: 92, // 2.4s is good (≤ 2.5s)
       description: "Measures loading performance. Good LCP is 2.5s or faster.",
       threshold: {
         good: "≤ 2.5s",
@@ -35,7 +35,7 @@ const CoreWebVitals = ({ vitals }: CoreWebVitalsProps) => {
     {
       metric: "First Input Delay (FID)",
       value: "85ms",
-      score: 90,
+      score: 95, // 85ms is excellent (≤ 100ms)
       description: "Measures interactivity. Good FID is 100ms or less.",
       threshold: {
         good: "≤ 100ms",
@@ -46,7 +46,7 @@ const CoreWebVitals = ({ vitals }: CoreWebVitalsProps) => {
     {
       metric: "Cumulative Layout Shift (CLS)",
       value: "0.08",
-      score: 85,
+      score: 90, // 0.08 is good (≤ 0.1)
       description: "Measures visual stability. Good CLS is 0.1 or less.",
       threshold: {
         good: "≤ 0.1",
