@@ -252,7 +252,7 @@ const Dashboard = () => {
                   <Button 
                     variant="outline" 
                     size="lg"
-                    className="border-white/20 text-white hover:bg-white/10"
+                    className="border-white/20 text-foreground bg-white hover:bg-white/90"
                     onClick={() => window.open('https://activ3websolutions.com', '_blank')}
                   >
                     Learn More About Us
